@@ -1,0 +1,95 @@
+function serialize(layout){
+
+	let head = '<?xml version="1.0" encoding="utf-8"?>';
+	//let frames = '<AnalyzedFrames></AnalyzedFrames>';
+	let frames = '';
+	let sceneAnalyzerOutput_attrs = "";
+	for(let attr in layout.SceneAnalyzerOutput.attrs){
+		sceneAnalyzerOutput_attrs += " " + attr +"=" + "\"" + layout.SceneAnalyzerOutput.attrs[attr] + "\"";
+	}
+
+	//let SceneAnalyzerOutput = '<SceneAnalyzerOutput ' + sceneAnalyzerOutput_attrs + '>' + frames + '</SceneAnalyzerOutput>';
+
+	let frameContainer = [];
+	for(let index in layout.SceneAnalyzerOutput.AnalyzedFrames){
+		let frameAttrs = "";
+		for(let attrIndex in layout.SceneAnalyzerOutput.AnalyzedFrames[index].attrs){
+			frameAttrs += " " + attrIndex + "=" + "\"" + layout.SceneAnalyzerOutput.AnalyzedFrames[index].attrs[attrIndex] + "\"";
+		}
+
+
+		let orienAttrs = "";
+		for(let orienIndex in layout.SceneAnalyzerOutput.AnalyzedFrames[index].Orientation.attrs){
+			orienAttrs += " " + orienIndex + "=" + "\"" + layout.SceneAnalyzerOutput.AnalyzedFrames[index].Orientation.attrs[orienIndex] + "\"";
+		}
+
+		let orientation = '<Orientation ' + orienAttrs + ' />';
+
+
+		let saturationAttrs = "";
+		for(let saturationIndex in layout.SceneAnalyzerOutput.AnalyzedFrames[index].Saturation.attrs){
+			saturationAttrs += " " + saturationIndex + "=" + "\"" +layout.SceneAnalyzerOutput.AnalyzedFrames[index].Saturation.attrs[saturationIndex] + "\"";
+		}
+
+		let saturation = "<Saturation " + saturationAttrs + " />";
+		//console.log(saturation);
+		//console.log(orientation);
+		//let singleFrame = '<AnalyzedFrame ' + frameAttrs +' >' + orientation + saturation + '</AnalyzedFrame>';
+		//console.log(singleFrame);
+		
+
+		let obstacleContainer = [];
+
+		for(let obstacleIndex in layout.SceneAnalyzerOutput.AnalyzedFrames[index].Obstacles){
+			let obstacleAttrs = "";
+			for(let obstacleAttrIndex in layout.SceneAnalyzerOutput.AnalyzedFrames[index].Obstacles[obstacleIndex].attrs){
+				obstacleAttrs += " " + obstacleAttrIndex + "=" + "\"" + layout.SceneAnalyzerOutput.AnalyzedFrames[index].Obstacles[obstacleIndex].attrs[obstacleAttrIndex] + "\"";
+			}
+
+
+			let obstacleSizeAttrs = "";
+			for(let obstacleSizeAttrsIndex in layout.SceneAnalyzerOutput.AnalyzedFrames[index].Obstacles[obstacleIndex].Size.attrs){
+				obstacleSizeAttrs += " " + obstacleSizeAttrsIndex + "=" + layout.SceneAnalyzerOutput.AnalyzedFrames[index].Obstacles[obstacleIndex].Size.attrs[obstacleSizeAttrsIndex] + "\"";
+			}
+			let obstacleSize = "<Size " + obstacleSizeAttrs + " />"
+			//console.log(obstacleSize);
+
+			let CentralPositionAttrs = "";
+			for(let CentralPositionAttrsIndex in layout.SceneAnalyzerOutput.AnalyzedFrames[index].Obstacles[obstacleIndex].CentralPosition.attrs){
+			
+				CentralPositionAttrs += " " + CentralPositionAttrsIndex + "=" + layout.SceneAnalyzerOutput.AnalyzedFrames[index].Obstacles[obstacleIndex].CentralPosition.attrs[CentralPositionAttrsIndex] + "\"";
+			}
+			let ObstacleCentralPosition = "<CentralPosition " + CentralPositionAttrs + " />";
+			//console.log(ObstacleCentralPosition);
+
+
+			let obstacle = '<Obstacle ' + obstacleAttrs + '> ' + obstacleSize + ObstacleCentralPosition + '</Obstacle>';
+			obstacleContainer.push(obstacle);
+			//console.log(obstacle);
+		}
+
+		let obstacleSet = "";
+		for(let obstacle of obstacleContainer){
+			obstacleSet += obstacle;
+		}
+		let singleFrame = '<AnalyzedFrame ' + frameAttrs +' >' + orientation + saturation + '<Obstacles>' + obstacleSet + '</Obstacles>' +  '</AnalyzedFrame>';
+
+		//console.log(singleFrame);
+
+		frameContainer.push(singleFrame);
+	}
+
+	let frameSet = "";
+	for(let frame of frameContainer){
+		frameSet += frame;
+	}
+
+
+
+	let SceneAnalyzerOutput = '<SceneAnalyzerOutput ' + sceneAnalyzerOutput_attrs + '>' + '<AnalyzedFrames>' + frameSet + '</AnalyzedFrames>'  + '</SceneAnalyzerOutput>';
+
+		
+
+	//return sceneAnalyzerOutput_attrs;
+	return head + SceneAnalyzerOutput;
+}
