@@ -289,6 +289,7 @@ async function generateLayout(){
 	myLayout.SceneAnalyzerOutput.AnalyzedFrames = myFrames;
 	
 	//console.log(serialize(layout_obj));
+	console.log("kaishile******************************************")
 	console.log(serialize(myLayout));
 }
 
@@ -478,6 +479,7 @@ function Frame(){
 }
 
 
-generateLayout();
+//generateLayout();
 
 exports.run = run;
+exports.generateLayout = generateLayout;

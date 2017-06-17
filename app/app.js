@@ -29,6 +29,8 @@ app.post('/upload', upload.single('logo'), function(req, res, next){
 
 app.post('/uploadfiles', multiUpload, function(req, res, next){
     res.send({ret_code: '0'});
+
+    objRecognizer.generateLayout();
 });
 
 
